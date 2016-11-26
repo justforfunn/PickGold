@@ -1,3 +1,4 @@
+##[下载链接](https://github.com/justforfunn/PickGold/releases/latest)
 ##仅供学习使用，请勿滥用
 ### 辅助捡和我信金币
 
