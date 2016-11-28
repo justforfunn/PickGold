@@ -72,7 +72,7 @@ public class GoldsListFragment extends Fragment {
         public void bindCrime(Golds golds) {
             mPickDay.setText(golds.getPickDay());
             mPickTime.setText(golds.getPickTime());
-            mNumbers.setText(String.valueOf(golds.getNumber()));
+            mNumbers.setText(String.valueOf(golds.getFormatNumber()));
         }
     }
 

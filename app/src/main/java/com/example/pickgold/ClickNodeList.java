@@ -18,11 +18,9 @@ public class ClickNodeList {
             sQueue.offer(new MyNode("金币","com.jx.cmcc.ict.ibelieve:id/a33","android.widget.LinearLayout",0,0));
             for (int i=0;i<10;i++){
                 sQueue.offer(new MyNode("***","com.jx.cmcc.ict.ibelieve:id/a5c","android.widget.LinearLayout",0,0));
-                /**
-                 *  LinearLayout下的可以查看流量的节点
-                 *  sQueue.offer(new MyNode("0 MBor邀请\n+50M","com.jx.cmcc.ict.ibelieve:id/lh","android.widget.TextView",0,0));
-                 *  sQueue.offer(new MyNode("成长","com.jx.cmcc.ict.ibelieve:id/qr",0,0));
-                 */
+//                   LinearLayout下的可以查看流量的节点
+//                   sQueue.offer(new MyNode("0 MBor邀请\n+50M","com.jx.cmcc.ict.ibelieve:id/lh","android.widget.TextView",0,0));
+//                   sQueue.offer(new MyNode("成长","com.jx.cmcc.ict.ibelieve:id/qr",0,0));
                 sQueue.offer(new MyNode("换一批","com.jx.cmcc.ict.ibelieve:id/ly","android.widget.LinearLayout",0,0));
             }
             sQueue.offer(new MyNode("***","com.jx.cmcc.ict.ibelieve:id/a5c","android.widget.LinearLayout",0,0));

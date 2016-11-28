@@ -49,6 +49,15 @@ public class Golds {
         return mNumber;
     }
 
+    /**
+     * 精确两位小数
+     * @return 金币数
+     */
+    public double getFormatNumber(){
+        double temp=Math.round(mNumber*100)/100.0;
+        return temp;
+    }
+
     public void setNumber(double number) {
         mNumber = number;
     }

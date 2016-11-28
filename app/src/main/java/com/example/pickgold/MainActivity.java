@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     boolean result=doStartApplicationWithPackageName(HE_WO_XIN_PACKAGE_NAME);
                     Toast.makeText(MainActivity.this,!result?"无法启动和我信":"成功启动和我信",Toast.LENGTH_SHORT).show();
                     if (result){
-                        /**
-                         * 成功打开
-                         */
+                        //成功打开
                         sIsButtonClicked=true;
                     }
                 }
@@ -103,9 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private boolean doStartApplicationWithPackageName(String packageName) {
         boolean flag=false;
-        /**
-         *  通过包名获取此APP详细信息，包括Activities、services、versioncode、name等等
-         */
+        //通过包名获取此APP详细信息，包括Activities、services、versioncode、name等等
         PackageInfo packageInfo = null;
         try {
             packageInfo = getPackageManager().getPackageInfo(packageName, 0);
@@ -115,36 +111,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (packageInfo == null) {
             return flag;
         }
-        /**
-         * 创建一个类别为CATEGORY_LAUNCHER的该包名的Intent
-         */
+        //创建一个类别为CATEGORY_LAUNCHER的该包名的Intent
         Intent resolveIntent = new Intent(Intent.ACTION_MAIN, null);
         resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         resolveIntent.setPackage(packageInfo.packageName);
-        /**
-         * 通过getPackageManager()的queryIntentActivities方法遍历
-         */
+        //通过getPackageManager()的queryIntentActivities方法遍历
+
         List<ResolveInfo> resolveInfoList = getPackageManager()
                 .queryIntentActivities(resolveIntent, 0);
 
         ResolveInfo resolveinfo = resolveInfoList.iterator().next();
         if (resolveinfo != null) {
-            /**
-             *  packagename = 参数packname
-             */
+            //packagename = 参数packname
             String packageName1 = resolveinfo.activityInfo.packageName;
-            /**
-             * 这个就是我们要找的该APP的LAUNCHER的Activity[组织形式：packagename.mainActivityname]
-             */
+            //这个就是我们要找的该APP的LAUNCHER的Activity[组织形式：packagename.mainActivityname]
             String className = resolveinfo.activityInfo.name;
-            /**
-             * LAUNCHER Intent
-             */
+            //LAUNCHER Intent
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            /**
-             * 设置ComponentName参数1:packagename参数2:MainActivity路径
-             */
+            //设置ComponentName参数1:packagename参数2:MainActivity路径
             ComponentName cn = new ComponentName(packageName1, className);
 
             intent.setComponent(cn);
@@ -184,20 +169,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 获取 PickGoldAccessibilityService 是否启用状态
-     * @return
+     * @return 服务是否被启用
      */
     private boolean isServiceEnabled() {
-        /**
-         *  先获取到AccessibilityManager然后根据反馈类型获取到已开启服务的列表
-         */
+        //先获取到AccessibilityManager然后根据反馈类型获取到已开启服务的列表
         boolean flag=false;
         AccessibilityManager accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         List<AccessibilityServiceInfo> accessibilityServices =
                 accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
         for (AccessibilityServiceInfo info : accessibilityServices) {
-            /**
-             * com.example.pickgold/.PickGoldAccessibilityService
-             */
+            //com.example.pickgold/.PickGoldAccessibilityService
             if (info.getId().equals(getPackageName() + "/.PickGoldAccessibilityService")) {
                 flag = true;
             }

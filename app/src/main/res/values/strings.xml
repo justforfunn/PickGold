@@ -10,5 +10,4 @@
     </string>
     <string name="code_url">https://github.com/justforfunn/PickGold</string>
     <string name="start_pick_gold">开始捡金币</string>
-    <string name="wait_for_pick_gold">等待%1$s分钟"</string>
 </resources>

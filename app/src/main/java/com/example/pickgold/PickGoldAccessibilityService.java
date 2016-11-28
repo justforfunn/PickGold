@@ -20,9 +20,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
 
     private void init() {
         mMyNode = ClickNodeList.resetQueue();
-        /**
-         * 捡到的金币数量
-         */
+        //捡到的金币数量
         mCount=0;
         mFlag=false;
     }
@@ -40,9 +38,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        /**
-         * 无论什么事件都扔进去处理
-         */
+        //无论什么事件都扔进去处理
         handleEvent(event);
 //        /**
 //         * 可以获取事件类型并执行相应的方法
@@ -102,29 +98,25 @@ public class PickGoldAccessibilityService extends AccessibilityService {
     }
 
     private void handleEvent(AccessibilityEvent event){
-        /**
-         * AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
-         * event.getSource()
-         * 获取活动窗口的节点信息，有时候并不是顶层节点
-         * 节点一定要可点击，节点的id 或 text 属性可以为空
-         * 点击的速度太快可能导致软件崩溃，节点需要自行回收
-         * 1.可以通过getParent(),getChild(int)以及一系列的判断（节点的属性）去找到指定节点
-         * 2.通过一个节点 返回根节点 然后遍历所有节点  然后过滤节点  然后点击
-         * 3.通过一个节点 返回根节点 通过findAccessibilityNodeInfosByViewId(int)找到指定节点
-         */
+//         AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
+//         event.getSource()
+//         获取活动窗口的节点信息，有时候并不是顶层节点
+//         节点一定要可点击，节点的id 或 text 属性可以为空
+//         点击的速度太快可能导致软件崩溃，节点需要自行回收
+//         1.可以通过getParent(),getChild(int)以及一系列的判断（节点的属性）去找到指定节点
+//         2.通过一个节点 返回根节点 然后遍历所有节点  然后过滤节点  然后点击
+//         3.通过一个节点 返回根节点 通过findAccessibilityNodeInfosByViewId(int)找到指定节点
+
         AccessibilityNodeInfo nodeInfo = event.getSource();
 
         if((nodeInfo!=null)&&(ClickNodeList.HE_WO_XIN_PACKAGE_NAME.equals(event.getPackageName()))&&(MainActivity.sIsButtonClicked))
         {
-            /**
-             * 如果事件源节点信息不为空，且是目标app的事件，则执行相应操作
-             * 如果需要点击的节点为空则先判断是不是弹空的，然后判断是否要重置节点，然后再返回不执行点击事件
-             */
+
+//            如果事件源节点信息不为空，且是目标app的事件，则执行相应操作
+//            如果需要点击的节点为空则先判断是不是弹空的，然后判断是否要重置节点，然后再返回不执行点击事件
             if (mMyNode == null) {
-                /**
-                 * 每次捡完金币Toast一次，然后过一段时间重置值
-                 *  金币为空说明服务（所有属性）被重置了，然后没有开始捡金币
-                 */
+//                每次捡完金币Toast一次，然后过一段时间重置值
+//                金币为空说明服务（所有属性）被重置了，然后没有开始捡金币
                 if ((!mFlag)&&(mGolds!=null)){
                     mFlag=true;
                     double temp=Math.round(mCount*100)/100.0;
@@ -141,9 +133,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            /**
-                             * 返回app
-                             */
+                            //返回app
                             for (int i=0;i<3;i++){
                                 PickGoldAccessibilityService.this.
                                         performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
@@ -168,10 +158,8 @@ public class PickGoldAccessibilityService extends AccessibilityService {
 
 
     private void clickTargetNode(@Nullable AccessibilityNodeInfo nodeInfo) {
-        /**
-         * 先返回到根节点，然后再找指定节点
-         * nodeInfo非空，只回收自己的创建的节点
-         */
+        //先返回到根节点，然后再找指定节点
+        //nodeInfo非空，只回收自己的创建的节点
         if (nodeInfo==null)
             return;
         AccessibilityNodeInfo top=nodeInfo;
@@ -184,53 +172,37 @@ public class PickGoldAccessibilityService extends AccessibilityService {
         List<AccessibilityNodeInfo> targetNodeList=top.findAccessibilityNodeInfosByViewId(mMyNode.getId());
         if (targetNodeList==null)
             return;
-        /**
-         * 标记当前节点是否点击成功
-         */
+        //标记当前节点是否点击成功
         boolean isClicked=false;
         for (int i=0,length=targetNodeList.size();i<length;i++){
             AccessibilityNodeInfo targetNode=targetNodeList.get(i);
 
             if (targetNode==null||(!targetNode.isClickable())){
-                /**
-                 * 节点为空或者不能点击
-                 */
+                //节点为空或者不能点击
                 continue;
             }
             if (length==6){
-                /**
-                 * 如果子节点有6个 说明在捡金币的界面 需要单独处理
-                 * 可以通过目标节点找到相关子节点，然后就可以获取用户名或者流量信息
-                 */
+                //如果子节点有6个 说明在捡金币的界面 需要单独处理
+                //可以通过目标节点找到相关子节点，然后就可以获取用户名或者流量信息
                 List<AccessibilityNodeInfo> goldNumberNodeList=targetNode.findAccessibilityNodeInfosByViewId("com.jx.cmcc.ict.ibelieve:id/lh");
-                if (goldNumberNodeList==null){
+                if (goldNumberNodeList==null||goldNumberNodeList.size()<=0){
                     continue;
                 }
-                if (goldNumberNodeList.size()<=0)
-                    continue;
                 AccessibilityNodeInfo goldNumberNode=goldNumberNodeList.get(0);
                 String goldNumber= goldNumberNode.getText().toString();
 
                 goldNumberNode.recycle();
 
                 if (i==1){
-                    /**
-                     * 开始捡金币的时候，需要实例化金币对象
-                     */
+                    //开始捡金币的时候，需要实例化金币对象
                     mGolds=new Golds(0);
-                }
-
-                if (i==5){
-                    /**
-                     *  到了最后一个节点，不管有没有流量捡，都必须切换节点
-                     */
+                }else if (i==5){
+                    //到了最后一个节点，不管有没有流量捡，都必须切换节点
                     isClicked=true;
                 }
-                if (goldNumber.equals("0 MB")||goldNumber.equals("邀请\n+50M")){
+                if (goldNumber.equals("0 MB")||goldNumber.equals("邀请\n+50M")||goldNumber.length()<3){
                     continue;
                 }
-                if (goldNumber.length()<3)
-                    continue;
                 mCount +=(Double.parseDouble(goldNumber.substring(0,goldNumber.length()-2)))/2;
                 Log.d(TAG,"获取到的流量为："+mCount);
             }
