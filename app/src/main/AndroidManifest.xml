@@ -33,6 +33,10 @@
                 android:resource="@xml/check_accessibility_config"/>
         </service>
 
+        <activity
+            android:name=".Main2Activity"
+            android:parentActivityName=".MainActivity">
+        </activity>
     </application>
 
 </manifest>

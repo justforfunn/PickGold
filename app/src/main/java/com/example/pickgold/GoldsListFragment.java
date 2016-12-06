@@ -14,8 +14,22 @@ import java.util.List;
 
 public class GoldsListFragment extends Fragment {
 
-    private RecyclerView mCrimeRecyclerView;
+    private RecyclerView mGoldsRecyclerView;
     private GoldsAdapter mAdapter;
+    private static final String ARGUMENTS_PICK_DAY="pick_day";
+
+    /**
+     * 实例化fragment
+     * @param pickDay 捡金币的日期
+     * @return goldsListFragment
+     */
+    public static GoldsListFragment newInstance(String pickDay){
+        GoldsListFragment goldsListFragment=new GoldsListFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString(ARGUMENTS_PICK_DAY,pickDay);
+        goldsListFragment.setArguments(bundle);
+        return goldsListFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,9 +41,9 @@ public class GoldsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
 
-        mCrimeRecyclerView = (RecyclerView) view
-                .findViewById(R.id.golds_recycler_view);
-        mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mGoldsRecyclerView = (RecyclerView) view
+                .findViewById(R.id.recycler_view_id);
+        mGoldsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
 
@@ -43,58 +57,67 @@ public class GoldsListFragment extends Fragment {
     }
 
     private void updateUI() {
-        GoldsList goldsList=GoldsList.getInstance(getActivity().getApplicationContext());
-        List<Golds> list = goldsList.getGoldsList();
+        DataList dataList = DataList.getInstance(getActivity().getApplicationContext());
+        List<Golds> list;
+        String pickDay=getArguments().getString(ARGUMENTS_PICK_DAY);
+        if (pickDay!=null){
+            list=dataList.getGoldsList(pickDay);
+        }else {
+            list = dataList.getGoldsList();
+        }
 
         if (mAdapter == null) {
             mAdapter = new GoldsAdapter(list);
-            mCrimeRecyclerView.setAdapter(mAdapter);
+            mGoldsRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    private class CrimeHolder extends RecyclerView.ViewHolder{
+    private class GoldsHolder extends RecyclerView.ViewHolder{
 
         private TextView mPickDay;
         private TextView mPickTime;
         private TextView mNumbers;
+        private TextView mOwner;
 
 
-        public CrimeHolder(View itemView) {
+        public GoldsHolder(View itemView) {
             super(itemView);
 
             mPickDay = (TextView) itemView.findViewById(R.id.pick_day);
             mPickTime = (TextView) itemView.findViewById(R.id.pick_time);
             mNumbers = (TextView) itemView.findViewById(R.id.golds_number);
+            mOwner = (TextView) itemView.findViewById(R.id.golds_owner);
         }
 
-        public void bindCrime(Golds golds) {
+        public void bindGolds(Golds golds) {
             mPickDay.setText(golds.getPickDay());
             mPickTime.setText(golds.getPickTime());
-            mNumbers.setText(String.valueOf(golds.getFormatNumber()));
+            mOwner.setText(golds.getOwner());
+            mNumbers.setText(String.valueOf(Double.parseDouble(golds.getNumber().toString())));
         }
     }
 
-    private class GoldsAdapter extends RecyclerView.Adapter<CrimeHolder> {
+    private class GoldsAdapter extends RecyclerView.Adapter<GoldsHolder> {
 
         private List<Golds> mGoldsList;
 
-        public GoldsAdapter(List<Golds> crimes) {
-            mGoldsList = crimes;
+        public GoldsAdapter(List<Golds> goldsList) {
+            mGoldsList = goldsList;
         }
 
         @Override
-        public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public GoldsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.fragment_golds_list, parent, false);
-            return new CrimeHolder(view);
+            return new GoldsHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(CrimeHolder holder, int position) {
+        public void onBindViewHolder(GoldsHolder holder, int position) {
             Golds golds = mGoldsList.get(position);
-            holder.bindCrime(golds);
+            holder.bindGolds(golds);
         }
 
         @Override

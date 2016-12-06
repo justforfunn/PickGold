@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -20,8 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.example.pickgold.ClickNodeList.HE_WO_XIN_PACKAGE_NAME;
@@ -30,7 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static boolean sIsButtonClicked = false;
 
     private Button mStartHeWoXin;
+    private LinearLayout mLinearLayout;
+    private FrameLayout mFrameLayout;
     private boolean mFlag = false;
+    private static final String SHAKE_GOLD_TIMES="shake_gold_times";
+    private static final String SHARE_PREFERENCE_NAME ="settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +47,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mStartHeWoXin = (Button) findViewById(R.id.startHeWoXin);
+        mLinearLayout = (LinearLayout) findViewById(R.id.day_record_detail_title);
+        mFrameLayout= (FrameLayout) findViewById(R.id.day_record_container);
+
         mFlag =isServiceEnabled();
         mStartHeWoXin.setOnClickListener(this);
+        updateUI();
 
         FragmentManager fragmentManager=getSupportFragmentManager();
-        Fragment fragment=fragmentManager.findFragmentById(R.id.container);
+        Fragment fragment=fragmentManager.findFragmentById(R.id.day_record_container);
         if (fragment==null){
-            fragment=new GoldsListFragment();
+            fragment=new DayRecordFragment();
             fragmentManager.beginTransaction()
-                    .add(R.id.container,fragment)
+                    .add(R.id.day_record_container,fragment)
                     .commit();
         }
 
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARE_PREFERENCE_NAME,0);
+        ClickNodeList.resetQueue(sharedPreferences.getInt(SHAKE_GOLD_TIMES,10));
+    }
+
+    private void updateUI() {
+        if (DataList.getInstance(this.getApplicationContext()).getDayRecordList().size()<=0){
+            mLinearLayout.setVisibility(View.INVISIBLE);
+            mFrameLayout.setVisibility(View.INVISIBLE);
+        } else {
+            mFrameLayout.setVisibility(View.VISIBLE);
+            mLinearLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -65,6 +90,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Uri uri = Uri.parse(getString(R.string.code_url));
                 Intent intent = new Intent(Intent.ACTION_VIEW,uri);
                 startActivity(intent);
+                break;
+            case R.id.set_shake_gold_times:
+                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                builder.setTitle("设置换一批的次数");
+                final EditText editText=new EditText(this);
+                editText.setText(String.valueOf(ClickNodeList.getTimes()));
+                builder.setView(editText);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            int times=Integer.parseInt(editText.getText().toString());
+                            ClickNodeList.resetQueue(times);
+                            SharedPreferences sharedPreferences=getSharedPreferences(SHARE_PREFERENCE_NAME,0);
+                            SharedPreferences.Editor editor=sharedPreferences.edit();
+                            editor.putInt(SHAKE_GOLD_TIMES,times);
+                            editor.commit();
+                        }catch (Exception e){
+                            Toast.makeText(MainActivity.this,"只能输入正整数",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.show();
+                break;
+            case R.id.instructions:
+                AlertDialog.Builder builder1=new AlertDialog.Builder(this);
+                builder1.setTitle("使用说明");
+                builder1.setMessage(R.string.instructions);
+                builder1.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                builder1.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -91,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        updateUI();
         mFlag =isServiceEnabled();
     }
 
@@ -161,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
-            Toast.makeText(this, "找\""+getString(R.string.service_name)+"\",然后开启服务", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getString(R.string.open_service_tips), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
         }

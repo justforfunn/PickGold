@@ -1,32 +1,42 @@
 package com.example.pickgold;
 
-import java.util.Calendar;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Golds {
 
     private String mPickDay;
     private String mPickTime;
-    private double mNumber;
+    private String mOwner;
+    private BigDecimal mNumber;
 
-    public Golds(double number) {
-        mNumber = number;
+    /**
+     * 用当前的时间实例化对象
+     * @param number 金币数
+     * @param owner 金币主
+     */
+    public Golds(BigDecimal number,String owner) {
+        mNumber = number.round(MathContext.DECIMAL32);
+        String[] dateStringArr=dateToStringArr(new Date());
+        mPickDay=dateStringArr[0];
+        mPickTime=dateStringArr[1];
+        mOwner=owner;
+    }
 
-        Date date=new Date();
-        Calendar calendar=Calendar.getInstance();
-        calendar.setTime(date);
-        int year=calendar.get(Calendar.YEAR);
-        int month=calendar.get(Calendar.MONTH);
-        int day=calendar.get(Calendar.DAY_OF_MONTH);
-        int hour=calendar.get(Calendar.HOUR_OF_DAY);
-        int minute=calendar.get(Calendar.MINUTE);
+    public String getOwner() {
+        return mOwner;
+    }
 
-        mPickDay=year+"年"+month+"月"+day+"日";
-        if (minute>=0&&minute<=9){
-            mPickTime=hour+":0"+minute;
-        }else {
-            mPickTime=hour+":"+minute;
-        }
+    public void setOwner(String owner) {
+        mOwner = owner;
+    }
+
+    public static String[] dateToStringArr(Date date){
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy.MM.dd,HH:mm:ss");
+        String dateString=simpleDateFormat.format(date);
+        return dateString.split(",");
     }
 
     public String getPickDay() {
@@ -45,20 +55,11 @@ public class Golds {
         mPickTime = pickTime;
     }
 
-    public double getNumber() {
+    public BigDecimal getNumber() {
         return mNumber;
     }
 
-    /**
-     * 精确两位小数
-     * @return 金币数
-     */
-    public double getFormatNumber(){
-        double temp=Math.round(mNumber*100)/100.0;
-        return temp;
-    }
-
-    public void setNumber(double number) {
-        mNumber = number;
+    public void setNumber(BigDecimal number) {
+        mNumber = number.round(MathContext.DECIMAL32);
     }
 }

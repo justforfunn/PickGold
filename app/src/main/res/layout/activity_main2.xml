@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/activity_main2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start_pick_gold"
-            android:id="@+id/startHeWoXin"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
+    android:paddingRight="@dimen/activity_horizontal_margin">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="horizontal"
-        android:id="@+id/day_record_detail_title">
+        android:id="@+id/gold_detail_title">
 
         <TextView
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/pick_date"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_time"
             android:textSize="20sp"
             android:textAlignment="center"/>
         <TextView
@@ -44,7 +39,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/count"
+            android:text="@string/owner"
             android:textSize="20sp"
             android:textAlignment="center"/>
 
@@ -53,8 +48,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/day_record_container"
-        android:layout_marginTop="@dimen/activity_vertical_margin">
+        android:id="@+id/gold_detail_container">
 
     </FrameLayout>
 
