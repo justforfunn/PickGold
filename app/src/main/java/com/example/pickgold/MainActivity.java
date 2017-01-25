@@ -26,10 +26,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import static com.example.pickgold.ClickNodeList.HE_WO_XIN_PACKAGE_NAME;
+import static com.example.pickgold.MyNodeList.HE_WO_XIN_PACKAGE_NAME;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static boolean sIsButtonClicked = false;
@@ -63,8 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .commit();
         }
 
-        SharedPreferences sharedPreferences=getSharedPreferences(SHARE_PREFERENCE_NAME,0);
-        ClickNodeList.resetQueue(sharedPreferences.getInt(SHAKE_GOLD_TIMES,10));
+        resetService();
     }
 
     private void updateUI() {
@@ -95,14 +93,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AlertDialog.Builder builder=new AlertDialog.Builder(this);
                 builder.setTitle("设置换一批的次数");
                 final EditText editText=new EditText(this);
-                editText.setText(String.valueOf(ClickNodeList.getTimes()));
+                editText.setText(String.valueOf(MyNodeList.getTimes()));
                 builder.setView(editText);
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
                             int times=Integer.parseInt(editText.getText().toString());
-                            ClickNodeList.resetQueue(times);
+                            resetService(times);
                             SharedPreferences sharedPreferences=getSharedPreferences(SHARE_PREFERENCE_NAME,0);
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putInt(SHAKE_GOLD_TIMES,times);
@@ -130,6 +128,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    private void resetService(int times) {
+        MyNodeList.resetQueue(times);
+        sIsButtonClicked=false;
+        PickGoldAccessibilityService.init();
+    }
+
+    private void resetService() {
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARE_PREFERENCE_NAME,0);
+        resetService(sharedPreferences.getInt(SHAKE_GOLD_TIMES,10));
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -141,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this,!result?"无法启动和我信":"成功启动和我信",Toast.LENGTH_SHORT).show();
                     if (result){
                         //成功打开
+                        resetService();
                         sIsButtonClicked=true;
                     }
                 }

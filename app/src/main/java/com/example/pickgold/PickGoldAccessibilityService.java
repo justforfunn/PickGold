@@ -1,8 +1,6 @@
 package com.example.pickgold;
 
 import android.accessibilityservice.AccessibilityService;
-import android.app.Notification;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -19,14 +17,14 @@ import java.util.Queue;
 public class PickGoldAccessibilityService extends AccessibilityService {
     private static final String TAG="PickGoldService";
 
-    private MyNode mMyNode;
-    private boolean mFlag;
-    private Queue<Golds> mGoldsQueue;
-    private Queue<Boolean> mBooleanQueue;
-    private double mSum;
+    private static MyNode mMyNode;
+    private static boolean mFlag;
+    private static Queue<Golds> mGoldsQueue;
+    private static Queue<Boolean> mBooleanQueue;
+    private static double mSum;
 
-    private void init() {
-        mMyNode = ClickNodeList.resetQueue();
+    public static void init() {
+        mMyNode = MyNodeList.resetQueue();
         //判断是否捡完金币，捡完则置为真然后等待重置
         mFlag=false;
 
@@ -37,6 +35,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
         }else {
             mGoldsQueue.clear();
         }
+
         if (mBooleanQueue==null){
             mBooleanQueue=new LinkedList<>();
         }else {
@@ -48,7 +47,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         init();
-        //Log.d(TAG, "辅助服务 onCreate");
+        Log.d(TAG, "辅助服务 onCreate");
     }
 
     /**
@@ -63,51 +62,51 @@ public class PickGoldAccessibilityService extends AccessibilityService {
         {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
                 //通知栏事件，Toast
-                //Log.d(TAG,"事件类型：TYPE_NOTIFICATION_STATE_CHANGED");
+                Log.d(TAG,"事件类型：TYPE_NOTIFICATION_STATE_CHANGED");
                 handleEvent(event);
                 break;
             case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
                 //窗体内容改变
-                //Log.d(TAG,"事件类型：TYPE_WINDOW_CONTENT_CHANGED");
+                Log.d(TAG,"事件类型：TYPE_WINDOW_CONTENT_CHANGED");
                 handleEvent(event);
                 break;
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 //窗体状态改变
-                //Log.d(TAG,"事件类型：TYPE_WINDOW_STATE_CHANGED");
+                Log.d(TAG,"事件类型：TYPE_WINDOW_STATE_CHANGED");
                 handleEvent(event);
                 break;
             case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
                 //View获取到焦点
-                //Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
                 handleEvent(event);
                 break;
             case AccessibilityEvent.TYPE_VIEW_CLICKED:
                 //点击事件
-                //Log.d(TAG,"事件类型：TYPE_VIEW_CLICKED");
+                Log.d(TAG,"事件类型：TYPE_VIEW_CLICKED");
                 handleEvent(event);
                 break;
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
                 //滑动事件
-                //Log.d(TAG,"事件类型：TYPE_VIEW_SCROLLED");
+                Log.d(TAG,"事件类型：TYPE_VIEW_SCROLLED");
                 handleEvent(event);
                 break;
             case AccessibilityEvent.TYPE_GESTURE_DETECTION_START:
-                //Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
                 break;
             case AccessibilityEvent.TYPE_GESTURE_DETECTION_END:
-                //Log.d(TAG,"事件类型：TYPE_GESTURE_DETECTION_END");
+                Log.d(TAG,"事件类型：TYPE_GESTURE_DETECTION_END");
                 break;
             case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
-                //Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_CHANGED");
+                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_CHANGED");
                 break;
             case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-                //Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_SELECTION_CHANGED");
+                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_SELECTION_CHANGED");
                 break;
             case AccessibilityEvent.TYPES_ALL_MASK:
-                //Log.d(TAG,"其他类型");
+                Log.d(TAG,"其他类型");
                 break;
             default:
-                //Log.d(TAG,"未匹配到事件类型");
+                Log.d(TAG,"未匹配到事件类型");
                 break;
         }
 
@@ -126,18 +125,18 @@ public class PickGoldAccessibilityService extends AccessibilityService {
         if (event.getText()!=null){
             //当前事件的文本信息
             List<CharSequence> charSequenceList=event.getText();
-            //Log.d(TAG,"当前事件文本信息："+event.getText().toString());
+            Log.d(TAG,"当前事件文本信息："+event.getText().toString());
             if (charSequenceList.size()==1&&charSequenceList.get(0).toString().equals("亲，你下手慢了哟")){
                 //判断是否捡成功，要么金币数发生变化，要么toast这句话
                 mBooleanQueue.add(false);
-                //Log.d(TAG,"mBooleanQueue add "+false+" "+mBooleanQueue.size());
+                Log.d(TAG,"mBooleanQueue add "+false+" "+mBooleanQueue.size());
                 return;
             }
         }
 
         AccessibilityNodeInfo nodeInfo = event.getSource();
 
-        if((nodeInfo==null)||(!ClickNodeList.HE_WO_XIN_PACKAGE_NAME.equals(event.getPackageName()))||(!MainActivity.sIsButtonClicked)) {
+        if((nodeInfo==null)||(!MyNodeList.HE_WO_XIN_PACKAGE_NAME.equals(event.getPackageName()))||(!MainActivity.sIsButtonClicked)) {
             return;
         }
         //如果事件源节点信息不为空，且是目标app的事件，则执行相应操作
@@ -212,7 +211,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
 
         AccessibilityNodeInfo top = getTopNode(nodeInfo);
 
-        String text=getSubNodeText(top,"com.jx.cmcc.ict.ibelieve:id/l8");
+        String text=getSubNodeText(top,"com.jx.cmcc.ict.ibelieve:id/my");//总金币数
 
         if (text!=null){
             try {
@@ -220,12 +219,12 @@ public class PickGoldAccessibilityService extends AccessibilityService {
                 double temp=Double.parseDouble(text);
                 if (mSum==0&&temp>0){
                     mSum=temp;
-                    //Log.d(TAG,"初始化mSum="+mSum);
+                    Log.d(TAG,"初始化mSum="+mSum);
                 }else if (temp>mSum){
                     mSum=temp;
                     mBooleanQueue.add(true);
-                    //Log.d(TAG,"mSum="+mSum);
-                    //Log.d(TAG,"mBooleanQueue add "+true+" "+mBooleanQueue.size());
+                    Log.d(TAG,"mSum="+mSum);
+                    Log.d(TAG,"mBooleanQueue add "+true+" "+mBooleanQueue.size());
                 }
             }catch (Exception e){
                 Log.e(TAG,"转型异常");
@@ -248,7 +247,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
             if (length==6){
                 //如果子节点有6个 说明在捡金币的界面 需要单独处理
                 //可以通过目标节点找到相关子节点，然后就可以获取用户名或者流量信息
-                String goldNumber = getSubNodeText(targetNode,"com.jx.cmcc.ict.ibelieve:id/lh");
+                String goldNumber = getSubNodeText(targetNode,"com.jx.cmcc.ict.ibelieve:id/n6");//金币数
                 if (goldNumber == null) {
                     continue;
                 }
@@ -259,7 +258,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
                 if (goldNumber.equals("0 MB")||goldNumber.equals("邀请\n+50M")||goldNumber.length()<3){
                     continue;
                 }
-                String owner = getSubNodeText(targetNode, "com.jx.cmcc.ict.ibelieve:id/le");
+                String owner = getSubNodeText(targetNode, "com.jx.cmcc.ict.ibelieve:id/n3");//金币主
 
                 //可能有误差
                 BigDecimal bigDecimal=new BigDecimal(Double.parseDouble(goldNumber.substring(0,goldNumber.length()-2)))
@@ -268,23 +267,23 @@ public class PickGoldAccessibilityService extends AccessibilityService {
 
                 mGoldsQueue.add(new Golds(bigDecimal,owner));
 
-                //Log.d(TAG,"此次获取到的流量为："+bigDecimal.toString());
+                Log.d(TAG,"此次获取到的流量为："+bigDecimal.toString());
             }
 
             isClicked=targetNode.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            //Log.d(TAG,"正在点击："+mMyNode.getText());
+            Log.d(TAG,"正在点击："+mMyNode.getText());
 
             targetNode.recycle();
 
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000*mMyNode.getSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         if (isClicked){
-            mMyNode = ClickNodeList.pollNode();
+            mMyNode = MyNodeList.pollNode();
         }
     }
 
@@ -345,7 +344,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
         Log.d(TAG,"节点信息："+nodeInfo.toString());
         Log.d(TAG,"text信息："+nodeInfo.getText());
         Log.d(TAG,"是否可以点击："+nodeInfo.isClickable());
-        //Log.d(TAG,"包名："+nodeInfo.getPackageName());
+        Log.d(TAG,"包名："+nodeInfo.getPackageName());
     }
 
     @Override
