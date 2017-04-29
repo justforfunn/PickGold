@@ -57,58 +57,59 @@ public class PickGoldAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 //        可以获取事件类型并执行相应的方法
-        int type= event.getEventType();
-        switch (type)
-        {
-            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                //通知栏事件，Toast
-                Log.d(TAG,"事件类型：TYPE_NOTIFICATION_STATE_CHANGED");
-                handleEvent(event);
-                break;
-            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-                //窗体内容改变
-                Log.d(TAG,"事件类型：TYPE_WINDOW_CONTENT_CHANGED");
-                handleEvent(event);
-                break;
-            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                //窗体状态改变
-                Log.d(TAG,"事件类型：TYPE_WINDOW_STATE_CHANGED");
-                handleEvent(event);
-                break;
-            case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
-                //View获取到焦点
-                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
-                handleEvent(event);
-                break;
-            case AccessibilityEvent.TYPE_VIEW_CLICKED:
-                //点击事件
-                Log.d(TAG,"事件类型：TYPE_VIEW_CLICKED");
-                handleEvent(event);
-                break;
-            case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-                //滑动事件
-                Log.d(TAG,"事件类型：TYPE_VIEW_SCROLLED");
-                handleEvent(event);
-                break;
-            case AccessibilityEvent.TYPE_GESTURE_DETECTION_START:
-                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
-                break;
-            case AccessibilityEvent.TYPE_GESTURE_DETECTION_END:
-                Log.d(TAG,"事件类型：TYPE_GESTURE_DETECTION_END");
-                break;
-            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
-                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_CHANGED");
-                break;
-            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_SELECTION_CHANGED");
-                break;
-            case AccessibilityEvent.TYPES_ALL_MASK:
-                Log.d(TAG,"其他类型");
-                break;
-            default:
-                Log.d(TAG,"未匹配到事件类型");
-                break;
-        }
+//        int type= event.getEventType();
+        handleEvent(event);
+//        switch (type)
+//        {
+//            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+//                //通知栏事件，Toast
+//                Log.d(TAG,"事件类型：TYPE_NOTIFICATION_STATE_CHANGED");
+//
+//                break;
+//            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+//                //窗体内容改变
+//                Log.d(TAG,"事件类型：TYPE_WINDOW_CONTENT_CHANGED");
+////                handleEvent(event);
+//                break;
+//            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+//                //窗体状态改变
+//                Log.d(TAG,"事件类型：TYPE_WINDOW_STATE_CHANGED");
+////                handleEvent(event);
+//                break;
+//            case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
+//                //View获取到焦点
+//                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+////                handleEvent(event);
+//                break;
+//            case AccessibilityEvent.TYPE_VIEW_CLICKED:
+//                //点击事件
+//                Log.d(TAG,"事件类型：TYPE_VIEW_CLICKED");
+////                handleEvent(event);
+//                break;
+//            case AccessibilityEvent.TYPE_VIEW_SCROLLED:
+//                //滑动事件
+//                Log.d(TAG,"事件类型：TYPE_VIEW_SCROLLED");
+////                handleEvent(event);
+//                break;
+//            case AccessibilityEvent.TYPE_GESTURE_DETECTION_START:
+//                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+//                break;
+//            case AccessibilityEvent.TYPE_GESTURE_DETECTION_END:
+//                Log.d(TAG,"事件类型：TYPE_GESTURE_DETECTION_END");
+//                break;
+//            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
+//                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_CHANGED");
+//                break;
+//            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
+//                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_SELECTION_CHANGED");
+//                break;
+//            case AccessibilityEvent.TYPES_ALL_MASK:
+//                Log.d(TAG,"其他类型");
+//                break;
+//            default:
+//                Log.d(TAG,"未匹配到事件类型");
+//                break;
+//        }
 
     }
 
@@ -126,7 +127,10 @@ public class PickGoldAccessibilityService extends AccessibilityService {
             //当前事件的文本信息
             List<CharSequence> charSequenceList=event.getText();
             Log.d(TAG,"当前事件文本信息："+event.getText().toString());
-            if (charSequenceList.size()==1&&charSequenceList.get(0).toString().equals("亲，你下手慢了哟")){
+            //TODO
+            if (charSequenceList.size()==1
+                    &&(charSequenceList.get(0).toString().equals("亲，你下手慢了哟")
+                    ||charSequenceList.get(0).toString().equals("Ta今天已不能再被捡了哟~"))){
                 //判断是否捡成功，要么金币数发生变化，要么toast这句话
                 mBooleanQueue.add(false);
                 Log.d(TAG,"mBooleanQueue add "+false+" "+mBooleanQueue.size());
@@ -210,8 +214,9 @@ public class PickGoldAccessibilityService extends AccessibilityService {
             return;
 
         AccessibilityNodeInfo top = getTopNode(nodeInfo);
+//        logAllChild(top);
 
-        String text=getSubNodeText(top,"com.jx.cmcc.ict.ibelieve:id/my");//总金币数
+        String text=getSubNodeText(top,MyNodeList.GOLD_NUMBER_ID_TEXT_VIEW);
 
         if (text!=null){
             try {
@@ -247,7 +252,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
             if (length==6){
                 //如果子节点有6个 说明在捡金币的界面 需要单独处理
                 //可以通过目标节点找到相关子节点，然后就可以获取用户名或者流量信息
-                String goldNumber = getSubNodeText(targetNode,"com.jx.cmcc.ict.ibelieve:id/n6");//金币数
+                String goldNumber = getSubNodeText(targetNode,MyNodeList.GOLD_OWNER_NUMBER_ID_TEXT_VIEW);
                 if (goldNumber == null) {
                     continue;
                 }
@@ -255,12 +260,12 @@ public class PickGoldAccessibilityService extends AccessibilityService {
                     //到了最后一个节点，不管有没有流量捡，都必须切换节点
                     isClicked=true;
                 }
-                if (goldNumber.equals("0 MB")||goldNumber.equals("邀请\n+50M")||goldNumber.length()<3){
+                if (goldNumber.equals("0MB")||goldNumber.equals("邀请\n+50M")||goldNumber.length()<3){
                     continue;
                 }
-                String owner = getSubNodeText(targetNode, "com.jx.cmcc.ict.ibelieve:id/n3");//金币主
+                String owner = getSubNodeText(targetNode, MyNodeList.GOLD_OWNER_NAME_ID_TEXT_VIEW);
 
-                //可能有误差
+                //可能有误差 TODO 等有金币捡的时候看下怎么计算
                 BigDecimal bigDecimal=new BigDecimal(Double.parseDouble(goldNumber.substring(0,goldNumber.length()-2)))
                         .divide(new BigDecimal(2))
                         .setScale(2, RoundingMode.HALF_UP);
@@ -297,6 +302,12 @@ public class PickGoldAccessibilityService extends AccessibilityService {
         return top;
     }
 
+    /**
+     * 从一个父布局中找子布局中控件的text值
+     * @param targetNode
+     * @param id
+     * @return
+     */
     @Nullable
     private String getSubNodeText(AccessibilityNodeInfo targetNode,String id) {
         List<AccessibilityNodeInfo> goldSubNodeList=targetNode.findAccessibilityNodeInfosByViewId(id);

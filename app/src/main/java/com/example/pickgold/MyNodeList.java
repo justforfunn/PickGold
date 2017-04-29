@@ -1,14 +1,21 @@
 package com.example.pickgold;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class MyNodeList {
+    public static final String HE_WO_XIN_PACKAGE_NAME ="com.jx.cmcc.ict.ibelieve";//和我信包名
+    public static final String COMMUNICATION_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/m5";//通信
+    public static final String STRING_OF_GOLD = "com.jx.cmcc.ict.ibelieve:id/ajv";//金币
+    public static final String GOLD_OWNER_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/po";//金币主layout
+    public static final String CHANGE_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/pi";//换一批
+    //上面都是可点击的 下面的不一定 但是都是有text属性的
+    public static final String GOLD_NUMBER_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/ow";//个人的总金币数TextView
+    public static final String GOLD_OWNER_NUMBER_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/p4";//金币主的金币数TextView
+    public static final String GOLD_OWNER_NAME_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/p1";//金币主名字TextView
 
-    public static final String HE_WO_XIN_PACKAGE_NAME ="com.jx.cmcc.ict.ibelieve";
 
     private static int sTimes = 10;
     private static Queue<MyNode> sQueue;
@@ -16,20 +23,13 @@ public class MyNodeList {
     public static @Nullable MyNode pollNode() {
         if (sQueue ==null){
             sQueue =new LinkedList<>();
-
-//            sQueue.offer(new MyNode("成长","com.jx.cmcc.ict.ibelieve:id/qr","android.widget.RadioButton",0,0));
-            sQueue.offer(new MyNode("通信","com.jx.cmcc.ict.ibelieve:id/jw","android.widget.RadioButton",3));
-            sQueue.offer(new MyNode("金币","com.jx.cmcc.ict.ibelieve:id/a6o","android.widget.LinearLayout",3));
+            sQueue.offer(new MyNode("通信", COMMUNICATION_LAYOUT,"android.widget.RadioButton",3));
+            sQueue.offer(new MyNode("金币", STRING_OF_GOLD,"android.widget.LinearLayout",3));
             for (int i = 0; i< sTimes; i++){
-                sQueue.offer(new MyNode("金币主layout","com.jx.cmcc.ict.ibelieve:id/zz","android.widget.LinearLayout",2));
-//                   LinearLayout下的可以查看流量的节点
-//                   sQueue.offer(new MyNode("总金币数","com.jx.cmcc.ict.ibelieve:id/l8 有变动","android.widget.TextView",0,0));
-//                      getText .toString 即可获得金币数
-//                   sQueue.offer(new MyNode("金币主text","com.jx.cmcc.ict.ibelieve:id/le","android.widget.TextView",0,0));
-//                   sQueue.offer(new MyNode("0 MBor邀请\n+50M","com.jx.cmcc.ict.ibelieve:id/lh","android.widget.TextView",0,0));
-                sQueue.offer(new MyNode("换一批","com.jx.cmcc.ict.ibelieve:id/nk","android.widget.LinearLayout",4));
+                sQueue.offer(new MyNode("金币主", GOLD_OWNER_LAYOUT,"android.widget.LinearLayout",2));
+                sQueue.offer(new MyNode("换一批", CHANGE_LAYOUT,"android.widget.LinearLayout",3));
             }
-            sQueue.offer(new MyNode("金币主layout","com.jx.cmcc.ict.ibelieve:id/zz","android.widget.LinearLayout",2));
+            sQueue.offer(new MyNode("金币主",GOLD_OWNER_LAYOUT,"android.widget.LinearLayout",3));
         }
 
         MyNode myNode=null;
