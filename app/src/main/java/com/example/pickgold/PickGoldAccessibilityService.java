@@ -57,59 +57,58 @@ public class PickGoldAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
 //        可以获取事件类型并执行相应的方法
-//        int type= event.getEventType();
-        handleEvent(event);
-//        switch (type)
-//        {
-//            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-//                //通知栏事件，Toast
-//                Log.d(TAG,"事件类型：TYPE_NOTIFICATION_STATE_CHANGED");
-//
-//                break;
-//            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-//                //窗体内容改变
-//                Log.d(TAG,"事件类型：TYPE_WINDOW_CONTENT_CHANGED");
-////                handleEvent(event);
-//                break;
-//            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-//                //窗体状态改变
-//                Log.d(TAG,"事件类型：TYPE_WINDOW_STATE_CHANGED");
-////                handleEvent(event);
-//                break;
-//            case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
-//                //View获取到焦点
-//                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
-////                handleEvent(event);
-//                break;
-//            case AccessibilityEvent.TYPE_VIEW_CLICKED:
-//                //点击事件
-//                Log.d(TAG,"事件类型：TYPE_VIEW_CLICKED");
-////                handleEvent(event);
-//                break;
-//            case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-//                //滑动事件
-//                Log.d(TAG,"事件类型：TYPE_VIEW_SCROLLED");
-////                handleEvent(event);
-//                break;
-//            case AccessibilityEvent.TYPE_GESTURE_DETECTION_START:
-//                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
-//                break;
-//            case AccessibilityEvent.TYPE_GESTURE_DETECTION_END:
-//                Log.d(TAG,"事件类型：TYPE_GESTURE_DETECTION_END");
-//                break;
-//            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
-//                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_CHANGED");
-//                break;
-//            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-//                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_SELECTION_CHANGED");
-//                break;
-//            case AccessibilityEvent.TYPES_ALL_MASK:
-//                Log.d(TAG,"其他类型");
-//                break;
-//            default:
-//                Log.d(TAG,"未匹配到事件类型");
-//                break;
-//        }
+        int type= event.getEventType();
+        switch (type)
+        {
+            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+                //通知栏事件，Toast
+                Log.d(TAG,"事件类型：TYPE_NOTIFICATION_STATE_CHANGED");
+                handleEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+                //窗体内容改变
+                Log.d(TAG,"事件类型：TYPE_WINDOW_CONTENT_CHANGED");
+                handleEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+                //窗体状态改变
+                Log.d(TAG,"事件类型：TYPE_WINDOW_STATE_CHANGED");
+                handleEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
+                //View获取到焦点
+                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+                handleEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_VIEW_CLICKED:
+                //点击事件
+                Log.d(TAG,"事件类型：TYPE_VIEW_CLICKED");
+                handleEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_VIEW_SCROLLED:
+                //滑动事件
+                Log.d(TAG,"事件类型：TYPE_VIEW_SCROLLED");
+                handleEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_GESTURE_DETECTION_START:
+                Log.d(TAG,"事件类型：TYPE_VIEW_ACCESSIBILITY_FOCUSED");
+                break;
+            case AccessibilityEvent.TYPE_GESTURE_DETECTION_END:
+                Log.d(TAG,"事件类型：TYPE_GESTURE_DETECTION_END");
+                break;
+            case AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED:
+                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_CHANGED");
+                break;
+            case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
+                Log.d(TAG,"事件类型：TYPE_VIEW_TEXT_SELECTION_CHANGED");
+                break;
+            case AccessibilityEvent.TYPES_ALL_MASK:
+                Log.d(TAG,"其他类型");
+                break;
+            default:
+                Log.d(TAG,"未匹配到事件类型");
+                break;
+        }
 
     }
 
@@ -130,7 +129,7 @@ public class PickGoldAccessibilityService extends AccessibilityService {
             //TODO
             if (charSequenceList.size()==1
                     &&(charSequenceList.get(0).toString().equals("亲，你下手慢了哟")
-                    ||charSequenceList.get(0).toString().equals("Ta今天已不能再被捡了哟~"))){
+                    ||charSequenceList.get(0).toString().equals("Ta今天已不能再被捡了哟 ~"))){
                 //判断是否捡成功，要么金币数发生变化，要么toast这句话
                 mBooleanQueue.add(false);
                 Log.d(TAG,"mBooleanQueue add "+false+" "+mBooleanQueue.size());

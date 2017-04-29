@@ -27,9 +27,9 @@ public class MyNodeList {
             sQueue.offer(new MyNode("金币", STRING_OF_GOLD,"android.widget.LinearLayout",3));
             for (int i = 0; i< sTimes; i++){
                 sQueue.offer(new MyNode("金币主", GOLD_OWNER_LAYOUT,"android.widget.LinearLayout",2));
-                sQueue.offer(new MyNode("换一批", CHANGE_LAYOUT,"android.widget.LinearLayout",3));
+                sQueue.offer(new MyNode("换一批", CHANGE_LAYOUT,"android.widget.LinearLayout",4));
             }
-            sQueue.offer(new MyNode("金币主",GOLD_OWNER_LAYOUT,"android.widget.LinearLayout",3));
+            sQueue.offer(new MyNode("金币主",GOLD_OWNER_LAYOUT,"android.widget.LinearLayout",4));
         }
 
         MyNode myNode=null;
