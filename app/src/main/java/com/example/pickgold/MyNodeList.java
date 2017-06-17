@@ -7,14 +7,14 @@ import java.util.Queue;
 
 public class MyNodeList {
     public static final String HE_WO_XIN_PACKAGE_NAME ="com.jx.cmcc.ict.ibelieve";//和我信包名
-    public static final String COMMUNICATION_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/m5";//通信
-    public static final String STRING_OF_GOLD = "com.jx.cmcc.ict.ibelieve:id/ajv";//金币
-    public static final String GOLD_OWNER_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/po";//金币主layout
-    public static final String CHANGE_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/pi";//换一批
+    public static final String COMMUNICATION_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/ny";//通信
+    public static final String STRING_OF_GOLD = "com.jx.cmcc.ict.ibelieve:id/anh";//金币
+    public static final String GOLD_OWNER_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/ri";//金币主layout
+    public static final String CHANGE_LAYOUT = "com.jx.cmcc.ict.ibelieve:id/rb";//换一批
     //上面都是可点击的 下面的不一定 但是都是有text属性的
-    public static final String GOLD_NUMBER_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/ow";//个人的总金币数TextView
-    public static final String GOLD_OWNER_NUMBER_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/p4";//金币主的金币数TextView
-    public static final String GOLD_OWNER_NAME_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/p1";//金币主名字TextView
+    public static final String GOLD_NUMBER_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/qp";//个人的总金币数TextView
+    public static final String GOLD_OWNER_NUMBER_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/qx";//金币主的金币数TextView
+    public static final String GOLD_OWNER_NAME_ID_TEXT_VIEW ="com.jx.cmcc.ict.ibelieve:id/qu";//金币主名字TextView
 
 
     private static int sTimes = 10;
